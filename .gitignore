@@ -2,8 +2,7 @@
 # This .gitignore file was automatically created by Microsoft(R) Visual Studio.
 ################################################################################
 
-/.vs
-/DocumentMerger/.vs/DocumentMerger
-/DocumentMerger/obj
-/DocumentMerger/.vs/ProjectEvaluation
-/DocumentMerger/bin/Debug/net8.0
+.vs/
+
+[Bb]in/
+[Oo]bj/
