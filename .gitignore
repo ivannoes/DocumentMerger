@@ -5,3 +5,5 @@
 /.vs
 /DocumentMerger/.vs/DocumentMerger
 /DocumentMerger/obj
+/DocumentMerger/.vs/ProjectEvaluation
+/DocumentMerger/bin/Debug/net8.0
