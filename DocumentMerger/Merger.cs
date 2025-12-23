@@ -2,17 +2,25 @@
 public abstract class MergerAbstract
 {
     private IDocumentProduct? _document;
-    public void mergeDocument(string pathInputDocument, object data)
+    public void mergeDocument(string pathInputDocument, IDtoGeneric data)
     {
         Console.WriteLine("Merging document...");
 
         _document = LoadDocument(pathInputDocument);
+        var dataAsDto = CastDto(data);
+
         // Additional merging logic would go here
-
     }
-
+    public IDtoGeneric CastDto(IDtoGeneric data)
+    {
+        Console.WriteLine($"data is type of {data.GetType()}");
+        IDtoCreator dtoCreator = new DtoCreator(data);
+        var dataAsDto = dtoCreator.CreateDto(data);
+        Console.WriteLine($"dtoCreator is type of {dataAsDto.GetType()}");
+        return dataAsDto;
+    }
     public abstract IDocumentProduct LoadDocument(string pathInputDocument);
-        
+
 }
 
 public class PDFMerger : MergerAbstract
