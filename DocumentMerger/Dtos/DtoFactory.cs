@@ -1,17 +1,27 @@
-﻿public interface IDtoGeneric { }
+﻿using Newtonsoft.Json.Linq;
+using Newtonsoft.Json;
+public abstract class DtoGeneric 
+{
+    public Dictionary<string, object>? ToDictionary()
+    {
+        var jObj = JObject.FromObject(this);
+
+        return jObj.ToObject<Dictionary<string, object>>();
+    }
+}
 public interface IDtoCreator
 {
-    IDtoGeneric CreateDto(IDtoGeneric dtoData);
+    DtoGeneric CreateDto(DtoGeneric dtoData);
 }
 
 public class DtoCreator : IDtoCreator
 {
-    private readonly IDtoGeneric _dtoData;
-    public DtoCreator(IDtoGeneric dtoData)
+    private readonly DtoGeneric _dtoData;
+    public DtoCreator(DtoGeneric dtoData)
     {
         _dtoData = dtoData;
     }
-    public IDtoGeneric CreateDto(IDtoGeneric dtoData)
+    public DtoGeneric CreateDto(DtoGeneric dtoData)
     {
         return dtoData switch
         {

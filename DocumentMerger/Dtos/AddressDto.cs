@@ -1,4 +1,4 @@
-﻿public class AddressDto : IDtoGeneric
+﻿public class AddressDto : DtoGeneric
 {
     public string Street { get; set; }
     public string City { get; set; }
@@ -8,7 +8,7 @@
 
 public class AddressDtoCreator : IDtoCreator
 {
-    public IDtoGeneric CreateDto(IDtoGeneric dtoData)
+    public DtoGeneric CreateDto(DtoGeneric dtoData)
     {
         var data = dtoData as AddressDto;
         return data;

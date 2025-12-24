@@ -1,4 +1,4 @@
-﻿public class UserDto : IDtoGeneric
+﻿public class UserDto : DtoGeneric
 {
     public int Id { get; set; }
     public string Name { get; set; }
@@ -7,7 +7,7 @@
 
 public class UserDtoCreator : IDtoCreator
 {
-    public IDtoGeneric CreateDto(IDtoGeneric dtoData)
+    public DtoGeneric CreateDto(DtoGeneric dtoData)
     {
         var data = dtoData as UserDto;
         return data;
