@@ -1,7 +1,7 @@
 ﻿public interface IDocumentProduct
 {
     void Open(string pathFile);
-    void Create();
+    void Create(string pathFile);
 }
 
 class PDFDocumentConcrete : IDocumentProduct
@@ -11,7 +11,7 @@ class PDFDocumentConcrete : IDocumentProduct
     Console.WriteLine($"Opening existing PDF document at {pathFile}.");
 
     }
-    public void Create()
+    public void Create(string pathFile)
     {
         Console.WriteLine("Generating a new, blank PDF document.");
     }
@@ -22,7 +22,7 @@ class WordDocumentConcrete : IDocumentProduct
     {
         Console.WriteLine($"Opening existing Word document at {pathFile}.");
     }
-    public void Create()
+    public void Create(string pathFile)
     {
         Console.WriteLine("Generating a new, blank Word document.");
     }
