@@ -8,6 +8,13 @@ public abstract class DtoGeneric
 
         return jObj.ToObject<Dictionary<string, object>>();
     }
+    public DtoGeneric CastDto()
+    {
+        IDtoCreator dtoCreator = new DtoCreator(this);
+        var dataAsDto = dtoCreator.CreateDto(this);
+
+        return dataAsDto;
+    }
 }
 public interface IDtoCreator
 {
