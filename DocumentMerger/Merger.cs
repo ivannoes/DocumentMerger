@@ -7,6 +7,7 @@ public abstract class MergerAbstract
         Console.WriteLine("Merging document...");
 
         _document = LoadDocument(pathInputDocument);
+        _document?.ToString();
 
         Console.WriteLine($"data is type of {data.GetType()}");
         var dataAsDto = data.CastDto();
@@ -23,7 +24,7 @@ public abstract class MergerAbstract
 
     }
 
-    public abstract IDocumentProduct LoadDocument(string pathInputDocument);
+    public abstract IDocumentProduct? LoadDocument(string pathInputDocument);
         
 }
 
@@ -35,18 +36,33 @@ public class PDFMerger : MergerAbstract
         IDocumentCreator creator = new PDFDocumentCreatorConcrete();
         var document = creator.CreateDocumentObject();
         document.Open(pathInputDocument);
+
         return document;
     }
 }
 
 public class WordMerger : MergerAbstract
 {
-    public override IDocumentProduct LoadDocument(string pathInputDocument)
+    public override IDocumentProduct? LoadDocument(string pathInputDocument)
     {
         Console.WriteLine("Loading Word document.");
-        IDocumentCreator creator = new WordDocumentCreatorConcrete();
-        var document = creator.CreateDocumentObject();
-        document.Open(pathInputDocument);
-        return document;
+        try
+        {
+            IDocumentCreator creator = new WordDocumentCreatorConcrete();
+            var document = creator.CreateDocumentObject();            
+            document.Open(pathInputDocument);
+            
+            return document as WordDocumentConcrete;
+        }
+        catch (FileNotFoundException ex)
+        {
+            Console.WriteLine($"Error loading Word document: {ex.Message}");
+        }
+        catch (Exception ex)
+        {
+            Console.WriteLine($"An unexpected error occurred: {ex.Message}");
+        }
+
+        return null;
     }
 }

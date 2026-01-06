@@ -4,5 +4,5 @@
     Name = "John Doe",
     Email = "j.doe@fakemail.com"
 };
-MergerAbstract merger = new PDFMerger();
-merger.mergeDocument("sample.pdf", data);
+MergerAbstract merger = new WordMerger();
+merger.mergeDocument("sample.docx", data);
