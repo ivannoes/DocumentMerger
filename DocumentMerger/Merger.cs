@@ -7,7 +7,10 @@ public abstract class MergerAbstract
         Console.WriteLine("Merging document...");
 
         _document = LoadDocument(pathInputDocument);
-        var dataAsDto = CastDto(data);
+
+        Console.WriteLine($"data is type of {data.GetType()}");
+        var dataAsDto = data.CastDto();
+        Console.WriteLine($"dtoCreator is type of {dataAsDto.GetType()}");
 
         // Example of using the dictionary representation of the DTO
         var dict = dataAsDto.ToDictionary();
@@ -19,14 +22,7 @@ public abstract class MergerAbstract
         // Additional merging logic would go here
 
     }
-    public DtoGeneric CastDto(DtoGeneric data)
-    {
-        Console.WriteLine($"data is type of {data.GetType()}");
-        IDtoCreator dtoCreator = new DtoCreator(data);
-        var dataAsDto = dtoCreator.CreateDto(data);
-        Console.WriteLine($"dtoCreator is type of {dataAsDto.GetType()}");
-        return dataAsDto;
-    }
+
     public abstract IDocumentProduct LoadDocument(string pathInputDocument);
         
 }
