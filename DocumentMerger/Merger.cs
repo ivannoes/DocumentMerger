@@ -14,18 +14,15 @@ public abstract class MergerAbstract
         Console.WriteLine($"dtoCreator is type of {dataAsDto.GetType()}");
 
         // Example of using the dictionary representation of the DTO
-        var dict = dataAsDto.ToDictionary();
-        foreach(var x in dict)
-        {
-            Console.WriteLine($"{x.Key} = {x.Value}");
-        }
-        
+        var dict = dataAsDto?.ToDictionary();
         // Additional merging logic would go here
-
+        ReplacePlaceholdersWithDictonary(_document, dict);
     }
 
     public abstract IDocumentProduct? LoadDocument(string pathInputDocument);
-        
+    public abstract void ReplacePlaceholdersWithDictonary(IDocumentProduct? document, Dictionary<string, object> dict);
+
+
 }
 
 public class PDFMerger : MergerAbstract
@@ -38,6 +35,10 @@ public class PDFMerger : MergerAbstract
         document.Open(pathInputDocument);
 
         return document;
+    }
+    public override void ReplacePlaceholdersWithDictonary(IDocumentProduct? document, Dictionary<string, object> dict)
+    {
+        Console.WriteLine($"Replacing placeholder using a dictonary...");
     }
 }
 
@@ -64,5 +65,15 @@ public class WordMerger : MergerAbstract
         }
 
         return null;
+    }
+    public override void ReplacePlaceholdersWithDictonary(IDocumentProduct? document, Dictionary<string, object> dict)
+    {
+        Console.WriteLine($"Replacing placeholder using a dictonary...");
+        foreach (var x in dict)
+        {
+            Console.WriteLine($"{x.Key} = {x.Value}");
+            document?.ReplaceText($"{{{{{x.Key}}}}}", $"{x.Value}");
+        }
+        document?.Save();
     }
 }
