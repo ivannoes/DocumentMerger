@@ -58,7 +58,7 @@ class WordDocument : IDocumentFacade
     }
 }
 
-interface IDocumentCreator
+public interface IDocumentCreator
 {
     public IDocumentFacade CreateDocumentObject();
 }

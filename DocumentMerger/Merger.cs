@@ -1,8 +1,14 @@
 ﻿
 public abstract class DocumentMerger
 {
-    private IDocumentProduct? _document;
-    public void mergeDocument(string pathInputDocument, DtoGeneric data)
+    private readonly IDocumentCreator _documentCreator;
+
+    public DocumentMerger(IDocumentCreator documentCreator)
+    {
+        _documentCreator = documentCreator;
+    }
+
+    public void MergeDocument(string pathInputDocument, DtoGeneric data)
     {
         Console.WriteLine("Merging document...");
 
@@ -27,8 +33,9 @@ public abstract class DocumentMerger
 
 public class PDFMerger : DocumentMerger
 {
-    public override IDocumentProduct LoadDocument(string pathInputDocument)
+    public PDFMerger(IDocumentCreator documentCreator) : base(documentCreator)
     {            
+    }
         Console.WriteLine("Loading PDF document.");
         IDocumentCreator creator = new PDFDocumentCreatorConcrete();
         var document = creator.CreateDocumentObject();
@@ -44,8 +51,9 @@ public class PDFMerger : DocumentMerger
 
 public class WordMerger : DocumentMerger
 {
-    public override IDocumentProduct? LoadDocument(string pathInputDocument)
+    public WordMerger(IDocumentCreator documentCreator) : base(documentCreator)
     {
+    }
         Console.WriteLine("Loading Word document.");
         try
         {
