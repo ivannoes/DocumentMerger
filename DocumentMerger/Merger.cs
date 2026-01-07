@@ -1,13 +1,19 @@
 ﻿
-public abstract class MergerAbstract
+public abstract class DocumentMerger
 {
-    private IDocumentProduct? _document;
-    public void mergeDocument(string pathInputDocument, DtoGeneric data)
+    private readonly IDocumentCreator _documentCreator;
+
+    public DocumentMerger(IDocumentCreator documentCreator)
+    {
+        _documentCreator = documentCreator;
+    }
+
+    public void MergeDocument(string pathInputDocument, DtoGeneric data)
     {
         Console.WriteLine("Merging document...");
-
-        _document = LoadDocument(pathInputDocument);
-        _document?.ToString();
+        IDocumentFacade document = _documentCreator.CreateDocumentObject();
+        
+        LoadDocument(pathInputDocument, document);
 
         Console.WriteLine($"data is type of {data.GetType()}");
         var dataAsDto = data.CastDto();
@@ -15,45 +21,46 @@ public abstract class MergerAbstract
 
         // Example of using the dictionary representation of the DTO
         var dict = dataAsDto?.ToDictionary();
+
         // Additional merging logic would go here
-        ReplacePlaceholdersWithDictonary(_document, dict);
+        ReplacePlaceholdersWithDictonary(document, dict);
     }
 
-    public abstract IDocumentProduct? LoadDocument(string pathInputDocument);
-    public abstract void ReplacePlaceholdersWithDictonary(IDocumentProduct? document, Dictionary<string, object> dict);
+    public abstract void LoadDocument(string pathInputDocument, IDocumentFacade document);
+    public abstract void ReplacePlaceholdersWithDictonary(IDocumentFacade document, Dictionary<string, object> dict);
 
 
 }
 
-public class PDFMerger : MergerAbstract
+public class PDFMerger : DocumentMerger
 {
-    public override IDocumentProduct LoadDocument(string pathInputDocument)
+    public PDFMerger(IDocumentCreator documentCreator) : base(documentCreator)
+    {
+    }
+
+    public override void LoadDocument(string pathInputDocument, IDocumentFacade document)
     {            
         Console.WriteLine("Loading PDF document.");
-        IDocumentCreator creator = new PDFDocumentCreatorConcrete();
-        var document = creator.CreateDocumentObject();
         document.Open(pathInputDocument);
-
-        return document;
     }
-    public override void ReplacePlaceholdersWithDictonary(IDocumentProduct? document, Dictionary<string, object> dict)
+    public override void ReplacePlaceholdersWithDictonary(IDocumentFacade document, Dictionary<string, object> dict)
     {
         Console.WriteLine($"Replacing placeholder using a dictonary...");
     }
 }
 
-public class WordMerger : MergerAbstract
+public class WordMerger : DocumentMerger
 {
-    public override IDocumentProduct? LoadDocument(string pathInputDocument)
+    public WordMerger(IDocumentCreator documentCreator) : base(documentCreator)
+    {
+    }
+
+    public override void LoadDocument(string pathInputDocument, IDocumentFacade document)
     {
         Console.WriteLine("Loading Word document.");
         try
-        {
-            IDocumentCreator creator = new WordDocumentCreatorConcrete();
-            var document = creator.CreateDocumentObject();            
-            document.Open(pathInputDocument);
-            
-            return document as WordDocumentConcrete;
+        {          
+            document.Open(pathInputDocument);            
         }
         catch (FileNotFoundException ex)
         {
@@ -63,10 +70,8 @@ public class WordMerger : MergerAbstract
         {
             Console.WriteLine($"An unexpected error occurred: {ex.Message}");
         }
-
-        return null;
     }
-    public override void ReplacePlaceholdersWithDictonary(IDocumentProduct? document, Dictionary<string, object> dict)
+    public override void ReplacePlaceholdersWithDictonary(IDocumentFacade document, Dictionary<string, object> dict)
     {
         Console.WriteLine($"Replacing placeholder using a dictonary...");
         foreach (var x in dict)

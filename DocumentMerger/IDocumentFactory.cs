@@ -1,7 +1,7 @@
 ﻿using Xceed.Words.NET;
 using Xceed.Document.NET;
 
-public interface IDocumentProduct
+public interface IDocumentFacade
 {
     void Open(string pathFile);
     void Create(string pathFile);
@@ -9,7 +9,7 @@ public interface IDocumentProduct
     void ReplaceText(string placeholder, string value);
 }
 
-class PDFDocumentConcrete : IDocumentProduct
+class PDFDocument : IDocumentFacade
 {
     public void Open(string pathFile)
     {
@@ -28,7 +28,7 @@ class PDFDocumentConcrete : IDocumentProduct
         Console.WriteLine($"Replacing '{placeholder}' with '{value}' in PDF document.");
     }
 }
-class WordDocumentConcrete : IDocumentProduct
+class WordDocument : IDocumentFacade
 {
     public DocX? document { get; set; }
     
@@ -58,23 +58,23 @@ class WordDocumentConcrete : IDocumentProduct
     }
 }
 
-interface IDocumentCreator
+public interface IDocumentCreator
 {
-    public IDocumentProduct CreateDocumentObject();
+    public IDocumentFacade CreateDocumentObject();
 }
 
-class PDFDocumentCreatorConcrete : IDocumentCreator
+public class PDFDocumentCreator : IDocumentCreator
 {
-    public IDocumentProduct CreateDocumentObject()
+    public IDocumentFacade CreateDocumentObject()
     {
-        return new PDFDocumentConcrete();
+        return new PDFDocument();
     }
 }
 
-class WordDocumentCreatorConcrete : IDocumentCreator
+public class WordDocumentCreator : IDocumentCreator
 {
-    public IDocumentProduct CreateDocumentObject()
+    public IDocumentFacade CreateDocumentObject()
     {
-        return new WordDocumentConcrete();
+        return new WordDocument();
     }
 }
