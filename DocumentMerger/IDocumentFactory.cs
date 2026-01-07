@@ -3,6 +3,7 @@ public interface IDocumentProduct
 {
     void Open(string pathFile);
     void Create(string pathFile);
+    void Save();
 }
 
 class PDFDocumentConcrete : IDocumentProduct
@@ -15,6 +16,9 @@ class PDFDocumentConcrete : IDocumentProduct
     {
         Console.WriteLine("Generating a new, blank PDF document.");
     }
+    public void Save()
+    {
+        Console.WriteLine("Saving PDF document.");
 }
 class WordDocumentConcrete : IDocumentProduct
 {
@@ -29,6 +33,10 @@ class WordDocumentConcrete : IDocumentProduct
     {
         Console.WriteLine("Generating a new, blank Word document.");
         document = DocX.Create(pathFile);
+        document?.Save();
+    }
+    public void Save()
+    {
         document?.Save();
     }
 }
