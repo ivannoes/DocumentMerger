@@ -1,5 +1,5 @@
 ﻿
-public abstract class MergerAbstract
+public abstract class DocumentMerger
 {
     private IDocumentProduct? _document;
     public void mergeDocument(string pathInputDocument, DtoGeneric data)
@@ -25,7 +25,7 @@ public abstract class MergerAbstract
 
 }
 
-public class PDFMerger : MergerAbstract
+public class PDFMerger : DocumentMerger
 {
     public override IDocumentProduct LoadDocument(string pathInputDocument)
     {            
@@ -42,7 +42,7 @@ public class PDFMerger : MergerAbstract
     }
 }
 
-public class WordMerger : MergerAbstract
+public class WordMerger : DocumentMerger
 {
     public override IDocumentProduct? LoadDocument(string pathInputDocument)
     {
