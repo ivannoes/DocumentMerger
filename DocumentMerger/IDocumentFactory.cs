@@ -1,9 +1,12 @@
 ﻿using Xceed.Words.NET;
+using Xceed.Document.NET;
+
 public interface IDocumentProduct
 {
     void Open(string pathFile);
     void Create(string pathFile);
     void Save();
+    void ReplaceText(string placeholder, string value);
 }
 
 class PDFDocumentConcrete : IDocumentProduct
@@ -19,6 +22,11 @@ class PDFDocumentConcrete : IDocumentProduct
     public void Save()
     {
         Console.WriteLine("Saving PDF document.");
+    }
+    public void ReplaceText(string placeholder, string value)
+    {
+        Console.WriteLine($"Replacing '{placeholder}' with '{value}' in PDF document.");
+    }
 }
 class WordDocumentConcrete : IDocumentProduct
 {
@@ -36,8 +44,17 @@ class WordDocumentConcrete : IDocumentProduct
         document?.Save();
     }
     public void Save()
-    {
+    {        
         document?.Save();
+    }
+    public void ReplaceText(string placeholder, string value)
+    {
+        var options = new StringReplaceTextOptions
+        {
+            SearchValue = placeholder,
+            NewValue = value
+        };
+        document?.ReplaceText(options);        
     }
 }
 
