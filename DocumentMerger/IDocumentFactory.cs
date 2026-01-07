@@ -63,18 +63,18 @@ interface IDocumentCreator
     public IDocumentFacade CreateDocumentObject();
 }
 
-class PDFDocumentCreatorConcrete : IDocumentCreator
+public class PDFDocumentCreator : IDocumentCreator
 {
     public IDocumentFacade CreateDocumentObject()
     {
-        return new PDFDocumentConcrete();
+        return new PDFDocument();
     }
 }
 
-class WordDocumentCreatorConcrete : IDocumentCreator
+public class WordDocumentCreator : IDocumentCreator
 {
     public IDocumentFacade CreateDocumentObject()
     {
-        return new WordDocumentConcrete();
+        return new WordDocument();
     }
 }
