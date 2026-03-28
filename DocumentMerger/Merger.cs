@@ -13,7 +13,10 @@ public abstract class DocumentMerger
         Console.WriteLine("Merging document...");
         IDocumentFacade document = _documentCreator.CreateDocumentObject();
         
-        LoadDocument(pathInputDocument, document);
+        if (!LoadDocument(pathInputDocument, document))
+        {
+            return;
+        }
 
         Console.WriteLine($"data is type of {data.GetType()}");
         
@@ -24,7 +27,7 @@ public abstract class DocumentMerger
         ReplacePlaceholdersWithDictonary(document, dict);
     }
 
-    public abstract void LoadDocument(string pathInputDocument, IDocumentFacade document);
+    public abstract bool LoadDocument(string pathInputDocument, IDocumentFacade document);
     public abstract void ReplacePlaceholdersWithDictonary(IDocumentFacade document, Dictionary<string, object> dict);
 
 
@@ -36,10 +39,11 @@ public class PDFMerger : DocumentMerger
     {
     }
 
-    public override void LoadDocument(string pathInputDocument, IDocumentFacade document)
+    public override bool LoadDocument(string pathInputDocument, IDocumentFacade document)
     {            
         Console.WriteLine("Loading PDF document.");
         document.Open(pathInputDocument);
+        return true;
     }
     public override void ReplacePlaceholdersWithDictonary(IDocumentFacade document, Dictionary<string, object> dict)
     {
@@ -53,21 +57,11 @@ public class WordMerger : DocumentMerger
     {
     }
 
-    public override void LoadDocument(string pathInputDocument, IDocumentFacade document)
+    public override bool LoadDocument(string pathInputDocument, IDocumentFacade document)
     {
         Console.WriteLine("Loading Word document.");
-        try
-        {          
-            document.Open(pathInputDocument);            
-        }
-        catch (FileNotFoundException ex)
-        {
-            Console.WriteLine($"Error loading Word document: {ex.Message}");
-        }
-        catch (Exception ex)
-        {
-            Console.WriteLine($"An unexpected error occurred: {ex.Message}");
-        }
+        document.Open(pathInputDocument);
+        return true;
     }
     public override void ReplacePlaceholdersWithDictonary(IDocumentFacade document, Dictionary<string, object> dict)
     {
