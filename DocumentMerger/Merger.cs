@@ -16,11 +16,9 @@ public abstract class DocumentMerger
         LoadDocument(pathInputDocument, document);
 
         Console.WriteLine($"data is type of {data.GetType()}");
-        var dataAsDto = data.CastDto();
-        Console.WriteLine($"dtoCreator is type of {dataAsDto.GetType()}");
-
+        
         // Example of using the dictionary representation of the DTO
-        var dict = dataAsDto?.ToDictionary();
+        var dict = data.ToDictionary();
 
         // Additional merging logic would go here
         ReplacePlaceholdersWithDictonary(document, dict);
