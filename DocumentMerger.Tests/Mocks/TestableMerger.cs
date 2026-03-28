@@ -4,9 +4,10 @@ public class TestableMerger : DocumentMerger
 {
     public TestableMerger(IDocumentCreator creator) : base(creator) { }
 
-    public override void LoadDocument(string pathInputDocument, IDocumentFacade document)
+    public override bool LoadDocument(string pathInputDocument, IDocumentFacade document)
     {
         document.Open(pathInputDocument);
+        return true;
     }
 
     public override void ReplacePlaceholdersWithDictonary(IDocumentFacade document, Dictionary<string, object> dict)
