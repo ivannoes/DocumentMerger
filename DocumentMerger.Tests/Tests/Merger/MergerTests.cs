@@ -1,83 +1,18 @@
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 
-namespace DocumentMergerTests;
-
-public class TestDocumentFacade : IDocumentFacade
-{
-    public string? LoadedPath { get; private set; }
-    public string? CreatedPath { get; private set; }
-    public bool SaveCalled { get; private set; }
-    public List<(string placeholder, string value)> Replacements { get; } = new();
-
-    public void Open(string pathFile)
-    {
-        LoadedPath = pathFile;
-    }
-
-    public void Create(string pathFile)
-    {
-        CreatedPath = pathFile;
-    }
-
-    public void Save()
-    {
-        SaveCalled = true;
-    }
-
-    public void ReplaceText(string placeholder, string value)
-    {
-        Replacements.Add((placeholder, value));
-    }
-
-    public void Reset()
-    {
-        LoadedPath = null;
-        CreatedPath = null;
-        SaveCalled = false;
-        Replacements.Clear();
-    }
-}
-
-public class TestDocumentCreator : IDocumentCreator
-{
-    public TestDocumentFacade Document { get; } = new();
-
-    public IDocumentFacade CreateDocumentObject()
-    {
-        return Document;
-    }
-}
-
-public class TestableMerger : DocumentMerger
-{
-    public TestableMerger(IDocumentCreator creator) : base(creator) { }
-
-    public override void LoadDocument(string pathInputDocument, IDocumentFacade document)
-    {
-        document.Open(pathInputDocument);
-    }
-
-    public override void ReplacePlaceholdersWithDictonary(IDocumentFacade document, Dictionary<string, object> dict)
-    {
-        foreach (var kvp in dict)
-        {
-            document?.ReplaceText($"{{{{{kvp.Key}}}}}", $"{kvp.Value}");
-        }
-        document?.Save();
-    }
-}
+namespace DocumentMergerTests.Tests.Merger;
 
 [TestClass]
 public class MergerTests
 {
-    private TestDocumentCreator _creator = null!;
-    private TestableMerger _merger = null!;
+    private Mocks.TestDocumentCreator _creator = null!;
+    private Mocks.TestableMerger _merger = null!;
 
     [TestInitialize]
     public void Setup()
     {
-        _creator = new TestDocumentCreator();
-        _merger = new TestableMerger(_creator);
+        _creator = new Mocks.TestDocumentCreator();
+        _merger = new Mocks.TestableMerger(_creator);
     }
 
     [TestMethod]
@@ -188,7 +123,7 @@ public class MergerTests
     [TestMethod]
     public void PDFMerger_LoadsDocument()
     {
-        var pdfCreator = new TestDocumentCreator();
+        var pdfCreator = new Mocks.TestDocumentCreator();
         var pdfMerger = new PDFMerger(pdfCreator);
 
         var data = new UserDto { Id = 1, Name = "Test", Email = "test@test.com" };

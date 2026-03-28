@@ -1,6 +1,6 @@
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 
-namespace DocumentMergerTests;
+namespace DocumentMergerTests.Tests.Dto;
 
 [TestClass]
 public class UserDtoTests
