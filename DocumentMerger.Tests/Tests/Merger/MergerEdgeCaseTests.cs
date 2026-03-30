@@ -24,17 +24,14 @@ public class MergerEdgeCaseTests
     }
 
     [TestMethod]
-    public void WordMerger_LoadDocument_WithNonExistentFile_HandlesGracefully()
+    public void WordMerger_LoadDocument_WithNonExistentFile_ThrowsFileNotFoundException()
     {
         var creator = new WordDocumentCreator();
         var merger = new WordMerger(creator);
         var nonExistentPath = Path.Combine(Path.GetTempPath(), "non_existent.docx");
         var data = new UserDto { Id = 1, Name = "Test", Email = "test@test.com" };
 
-        merger.MergeDocument(nonExistentPath, data);
-
-        var output = _consoleOutput.ToString();
-        Assert.IsTrue(output.Contains("Error loading Word document"));
+        Assert.ThrowsException<FileNotFoundException>(() => merger.MergeDocument(nonExistentPath, data));
     }
 
     [TestMethod]
