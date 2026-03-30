@@ -6,4 +6,4 @@
 };
 IDocumentCreator creator = new WordDocumentCreator();
 DocumentMerger merger = new WordMerger(creator);
-merger.MergeDocument("sample.docx", data);
+merger.MergeDocument("sample.docx", "output.docx", data);

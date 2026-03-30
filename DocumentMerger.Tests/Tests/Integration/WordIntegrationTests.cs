@@ -39,7 +39,7 @@ public class WordIntegrationTests
         IDocumentCreator creator = new WordDocumentCreator();
         DocumentMerger merger = new WordMerger(creator);
 
-        merger.MergeDocument(_testFilePath, data);
+        merger.MergeDocument(_testFilePath, _outputFilePath, data);
 
         Assert.IsTrue(File.Exists(_testFilePath));
     }

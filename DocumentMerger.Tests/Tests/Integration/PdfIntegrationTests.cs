@@ -42,7 +42,7 @@ public class PdfIntegrationTests
         IDocumentCreator creator = new PDFDocumentCreator();
         DocumentMerger merger = new PDFMerger(creator);
 
-        merger.MergeDocument("template.pdf", data);
+        merger.MergeDocument("template.pdf", "output.pdf", data);
 
         var output = _consoleOutput.ToString();
         Assert.IsTrue(output.Contains("Merging document"));
@@ -81,7 +81,7 @@ public class PdfIntegrationTests
         IDocumentCreator creator = new PDFDocumentCreator();
         DocumentMerger merger = new PDFMerger(creator);
 
-        merger.MergeDocument("address_template.pdf", data);
+        merger.MergeDocument("address_template.pdf", "output.pdf", data);
 
         var output = _consoleOutput.ToString();
         Assert.IsTrue(output.Contains("Merging document"));

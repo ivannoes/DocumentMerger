@@ -25,7 +25,7 @@ public class MergerTests
             Email = "test@example.com"
         };
 
-        _merger.MergeDocument("test.docx", data);
+        _merger.MergeDocument("test.docx", "output.docx", data);
 
         Assert.IsNotNull(_creator.Document.LoadedPath);
         Assert.AreEqual("test.docx", _creator.Document.LoadedPath);
@@ -41,7 +41,7 @@ public class MergerTests
             Email = "john@example.com"
         };
 
-        _merger.MergeDocument("test.docx", data);
+        _merger.MergeDocument("test.docx", "output.docx", data);
 
         Assert.IsTrue(_creator.Document.Replacements.Count > 0);
         Assert.IsTrue(_creator.Document.SaveCalled);
@@ -57,7 +57,7 @@ public class MergerTests
             Email = "alice@example.com"
         };
 
-        _merger.MergeDocument("test.docx", data);
+        _merger.MergeDocument("test.docx", "output.docx", data);
 
         Assert.AreEqual(3, _creator.Document.Replacements.Count);
         Assert.IsTrue(_creator.Document.Replacements.Any(r => r.placeholder == "{{Id}}" && r.value == "1"));
@@ -76,7 +76,7 @@ public class MergerTests
             ZipCode = "62701"
         };
 
-        _merger.MergeDocument("test.docx", data);
+        _merger.MergeDocument("test.docx", "output.docx", data);
 
         Assert.AreEqual(4, _creator.Document.Replacements.Count);
         Assert.IsTrue(_creator.Document.Replacements.Any(r => r.placeholder == "{{Street}}" && r.value == "123 Main St"));
@@ -95,7 +95,7 @@ public class MergerTests
             Email = null
         };
 
-        _merger.MergeDocument("test.docx", data);
+        _merger.MergeDocument("test.docx", "output.docx", data);
 
         Assert.IsTrue(_creator.Document.Replacements.Count >= 1);
     }
@@ -105,7 +105,7 @@ public class MergerTests
     {
         var data = new UserDto { Id = 1, Name = "Test", Email = "test@test.com" };
 
-        _merger.MergeDocument("document.docx", data);
+        _merger.MergeDocument("document.docx", "output.docx", data);
 
         Assert.AreEqual("document.docx", _creator.Document.LoadedPath);
     }
@@ -115,7 +115,7 @@ public class MergerTests
     {
         var data = new UserDto { Id = 1, Name = "Test", Email = "test@test.com" };
 
-        _merger.MergeDocument("document.docx", data);
+        _merger.MergeDocument("document.docx", "output.docx", data);
 
         Assert.IsTrue(_creator.Document.SaveCalled);
     }
@@ -127,7 +127,7 @@ public class MergerTests
         var pdfMerger = new PDFMerger(pdfCreator);
 
         var data = new UserDto { Id = 1, Name = "Test", Email = "test@test.com" };
-        pdfMerger.MergeDocument("test.pdf", data);
+        pdfMerger.MergeDocument("test.pdf", "output.pdf", data);
 
         Assert.AreEqual("test.pdf", pdfCreator.Document.LoadedPath);
     }

@@ -8,7 +8,7 @@ public abstract class DocumentMerger
         _documentCreator = documentCreator;
     }
 
-    public void MergeDocument(string pathInputDocument, DtoGeneric data)
+    public void MergeDocument(string pathInputDocument, string pathOutputDocument, DtoGeneric data)
     {
         Console.WriteLine("Merging document...");
         IDocumentFacade document = _documentCreator.CreateDocumentObject();
@@ -20,15 +20,13 @@ public abstract class DocumentMerger
 
         Console.WriteLine($"data is type of {data.GetType()}");
         
-        // Example of using the dictionary representation of the DTO
         var dict = data.ToDictionary();
 
-        // Additional merging logic would go here
-        ReplacePlaceholdersWithDictonary(document, dict);
+        ReplacePlaceholdersWithDictonary(document, dict, pathOutputDocument);
     }
 
     public abstract bool LoadDocument(string pathInputDocument, IDocumentFacade document);
-    public abstract void ReplacePlaceholdersWithDictonary(IDocumentFacade document, Dictionary<string, object> dict);
+    public abstract void ReplacePlaceholdersWithDictonary(IDocumentFacade document, Dictionary<string, object> dict, string pathOutputDocument);
 
 
 }
@@ -45,9 +43,10 @@ public class PDFMerger : DocumentMerger
         document.Open(pathInputDocument);
         return true;
     }
-    public override void ReplacePlaceholdersWithDictonary(IDocumentFacade document, Dictionary<string, object> dict)
-    {
+    public override void ReplacePlaceholdersWithDictonary(IDocumentFacade document, Dictionary<string, object> dict, string pathOutputDocument)
+    {            
         Console.WriteLine($"Replacing placeholder using a dictonary...");
+        document.SaveAs(pathOutputDocument);
     }
 }
 
@@ -63,7 +62,7 @@ public class WordMerger : DocumentMerger
         document.Open(pathInputDocument);
         return true;
     }
-    public override void ReplacePlaceholdersWithDictonary(IDocumentFacade document, Dictionary<string, object> dict)
+    public override void ReplacePlaceholdersWithDictonary(IDocumentFacade document, Dictionary<string, object> dict, string pathOutputDocument)
     {
         Console.WriteLine($"Replacing placeholder using a dictonary...");
         foreach (var x in dict)
@@ -71,6 +70,6 @@ public class WordMerger : DocumentMerger
             Console.WriteLine($"{x.Key} = {x.Value}");
             document?.ReplaceText($"{{{{{x.Key}}}}}", $"{x.Value}");
         }
-        document?.Save();
+        document?.SaveAs(pathOutputDocument);
     }
 }
