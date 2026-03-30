@@ -6,6 +6,7 @@ public interface IDocumentFacade
     void Open(string pathFile);
     void Create(string pathFile);
     void Save();
+    void SaveAs(string pathFile);
     void ReplaceText(string placeholder, string value);
 }
 
@@ -22,6 +23,10 @@ class PDFDocument : IDocumentFacade
     public void Save()
     {
         Console.WriteLine("Saving PDF document.");
+    }
+    public void SaveAs(string pathFile)
+    {
+        Console.WriteLine($"Saving PDF document as {pathFile}.");
     }
     public void ReplaceText(string placeholder, string value)
     {
@@ -46,6 +51,11 @@ class WordDocument : IDocumentFacade
     public void Save()
     {        
         document?.Save();
+    }
+    public void SaveAs(string pathFile)
+    {        
+        Console.WriteLine($"Saving Word document as {pathFile}.");
+        document?.SaveAs(pathFile);
     }
     public void ReplaceText(string placeholder, string value)
     {

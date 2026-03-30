@@ -31,7 +31,7 @@ public class MergerEdgeCaseTests
         var nonExistentPath = Path.Combine(Path.GetTempPath(), "non_existent.docx");
         var data = new UserDto { Id = 1, Name = "Test", Email = "test@test.com" };
 
-        Assert.ThrowsException<FileNotFoundException>(() => merger.MergeDocument(nonExistentPath, data));
+        Assert.ThrowsException<FileNotFoundException>(() => merger.MergeDocument(nonExistentPath, "output.docx", data));
     }
 
     [TestMethod]
@@ -42,7 +42,7 @@ public class MergerEdgeCaseTests
         var data = new UserDto { Id = 1, Name = "Test", Email = "test@test.com" };
         var dict = data.ToDictionary();
 
-        pdfMerger.ReplacePlaceholdersWithDictonary(creator.CreateDocumentObject(), dict!);
+        pdfMerger.ReplacePlaceholdersWithDictonary(creator.CreateDocumentObject(), dict!, "output.pdf");
 
         var output = _consoleOutput.ToString();
         Assert.IsTrue(output.Contains("Replacing placeholder using a dictonary"));
@@ -56,7 +56,7 @@ public class MergerEdgeCaseTests
         var merger = new Mocks.TestableMerger(testCreator);
         var data = new UserDto { Id = 0, Name = null, Email = null };
 
-        merger.MergeDocument("test.docx", data);
+        merger.MergeDocument("test.docx", "output.docx", data);
 
         Assert.IsNotNull(testCreator.Document.LoadedPath);
     }
@@ -75,7 +75,7 @@ public class MergerEdgeCaseTests
             ZipCode = null
         };
 
-        merger.MergeDocument("test.docx", data);
+        merger.MergeDocument("test.docx", "output.docx", data);
 
         Assert.IsTrue(testCreator.Document.Replacements.Count >= 1);
         Assert.IsTrue(testCreator.Document.SaveCalled);
@@ -93,7 +93,7 @@ public class MergerEdgeCaseTests
             Email = "john@example.com"
         };
 
-        merger.MergeDocument("test.docx", data);
+        merger.MergeDocument("test.docx", "output.docx", data);
 
         Assert.IsTrue(testCreator.Document.Replacements.Count >= 3);
     }
@@ -110,7 +110,7 @@ public class MergerEdgeCaseTests
             Email = "test@test.com"
         };
 
-        merger.MergeDocument("test.docx", data);
+        merger.MergeDocument("test.docx", "output.docx", data);
 
         Assert.IsTrue(testCreator.Document.Replacements.Any(r => 
             r.placeholder.Contains("{{") && r.placeholder.Contains("}}")));

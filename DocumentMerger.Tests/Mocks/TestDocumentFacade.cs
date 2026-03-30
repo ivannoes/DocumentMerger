@@ -22,6 +22,12 @@ public class TestDocumentFacade : IDocumentFacade
         SaveCalled = true;
     }
 
+    public void SaveAs(string pathFile)
+    {
+        CreatedPath = pathFile;
+        SaveCalled = true;
+    }
+
     public void ReplaceText(string placeholder, string value)
     {
         Replacements.Add((placeholder, value));
