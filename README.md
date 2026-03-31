@@ -3,7 +3,7 @@ A small, focused .NET 8 library for merging DTOs into document templates (PDF, W
 
 ## CLI Usage
 
-The CLI tool (`mergedoc`) merges data from a JSON file into a document template.
+The CLI tool merges data from a JSON file into a document template.
 
 ### Installation
 
