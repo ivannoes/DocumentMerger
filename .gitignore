@@ -6,3 +6,8 @@
 
 [Bb]in/
 [Oo]bj/
+
+user.json
+*.json
+*.docx
+*.pdf

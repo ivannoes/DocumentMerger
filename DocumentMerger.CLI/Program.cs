@@ -173,18 +173,17 @@ class Program
                 var jsonValue = jsonData[prop.Name];
                 if (jsonValue != null)
                 {
-                    var propType = prop.PropertyType;
-                    var value = jsonValue.ToObject(propType);
+                    var value = jsonValue.ToObject(prop.PropertyType);
                     prop.SetValue(dto, value);
                 }
             }
 
             IDocumentCreator creator = isWord
-                ? (IDocumentCreator)new WordDocumentCreator()
+                ? new WordDocumentCreator()
                 : new PDFDocumentCreator();
 
-            global::DocumentMerger merger = isWord
-                ? (global::DocumentMerger)new WordMerger(creator)
+            DocumentMerger merger = isWord
+                ? new WordMerger(creator)
                 : new PDFMerger(creator);
 
             merger.MergeDocument(inputPath, outputPath, (DtoGeneric)dto);
