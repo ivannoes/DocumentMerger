@@ -5,7 +5,7 @@ A small, focused .NET 8 library for merging DTOs into document templates (PDF, W
 
 The CLI tool merges data from a JSON file into a document template.
 
-### Installation
+### Usage
 
 ```bash
 dotnet run --project DocumentMerger.CLI/DocumentMerger.CLI.csproj -- [options]
