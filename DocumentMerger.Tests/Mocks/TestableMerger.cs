@@ -10,7 +10,7 @@ public class TestableMerger : DocumentMerger
         return true;
     }
 
-    public override void ReplacePlaceholdersWithDictonary(IDocumentFacade document, Dictionary<string, object> dict, string pathOutputDocument)
+    public override void ReplacePlaceholdersWithDictonary(IDocumentFacade document, Dictionary<string, object> dict)
     {
         if (dict == null) return;
 
@@ -18,6 +18,10 @@ public class TestableMerger : DocumentMerger
         {
             document?.ReplaceText($"{{{{{kvp.Key}}}}}", $"{kvp.Value}");
         }
+    }
+
+    public override void SaveOutput(IDocumentFacade document, string pathOutputDocument)
+    {
         document?.SaveAs(pathOutputDocument);
     }
 }
