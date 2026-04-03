@@ -1,4 +1,8 @@
-﻿
+using System;
+using System.IO;
+using System.Collections.Generic;
+using MiniSoftware;
+
 public abstract class DocumentMerger
 {
     private readonly IDocumentCreator _documentCreator;
@@ -22,13 +26,13 @@ public abstract class DocumentMerger
         
         var dict = data.ToDictionary();
 
-        ReplacePlaceholdersWithDictonary(document, dict, pathOutputDocument);
+        ReplacePlaceholdersWithDictonary(document, dict);
+        SaveOutput(document, pathOutputDocument);
     }
 
     public abstract bool LoadDocument(string pathInputDocument, IDocumentFacade document);
-    public abstract void ReplacePlaceholdersWithDictonary(IDocumentFacade document, Dictionary<string, object> dict, string pathOutputDocument);
-
-
+    public abstract void ReplacePlaceholdersWithDictonary(IDocumentFacade document, Dictionary<string, object> dict);
+    public abstract void SaveOutput(IDocumentFacade document, string pathOutputDocument);
 }
 
 public class PDFMerger : DocumentMerger
@@ -43,9 +47,12 @@ public class PDFMerger : DocumentMerger
         document.Open(pathInputDocument);
         return true;
     }
-    public override void ReplacePlaceholdersWithDictonary(IDocumentFacade document, Dictionary<string, object> dict, string pathOutputDocument)
+    public override void ReplacePlaceholdersWithDictonary(IDocumentFacade document, Dictionary<string, object> dict)
     {            
         Console.WriteLine($"Replacing placeholder using a dictonary...");
+    }
+    public override void SaveOutput(IDocumentFacade document, string pathOutputDocument)
+    {
         document.SaveAs(pathOutputDocument);
     }
 }
@@ -62,7 +69,7 @@ public class WordMerger : DocumentMerger
         document.Open(pathInputDocument);
         return true;
     }
-    public override void ReplacePlaceholdersWithDictonary(IDocumentFacade document, Dictionary<string, object> dict, string pathOutputDocument)
+    public override void ReplacePlaceholdersWithDictonary(IDocumentFacade document, Dictionary<string, object> dict)
     {
         Console.WriteLine($"Replacing placeholder using a dictonary...");
         foreach (var x in dict)
@@ -70,6 +77,23 @@ public class WordMerger : DocumentMerger
             Console.WriteLine($"{x.Key} = {x.Value}");
             document?.ReplaceText($"{{{{{x.Key}}}}}", $"{x.Value}");
         }
-        document?.SaveAs(pathOutputDocument);
+    }
+    public override void SaveOutput(IDocumentFacade document, string pathOutputDocument)
+    {
+        string outputExtension = Path.GetExtension(pathOutputDocument).ToLowerInvariant();
+        
+        if (outputExtension == ".pdf")
+        {
+            string tempDocxPath = Path.GetTempFileName() + ".docx";
+            document?.SaveAs(tempDocxPath);
+            Console.WriteLine($"Converting Word to PDF...");
+            MiniPdf.ConvertToPdf(tempDocxPath, pathOutputDocument);
+            File.Delete(tempDocxPath);
+            Console.WriteLine($"PDF saved to {pathOutputDocument}");
+        }
+        else
+        {
+            document?.SaveAs(pathOutputDocument);
+        }
     }
 }

@@ -42,7 +42,7 @@ public class MergerEdgeCaseTests
         var data = new UserDto { Id = 1, Name = "Test", Email = "test@test.com" };
         var dict = data.ToDictionary();
 
-        pdfMerger.ReplacePlaceholdersWithDictonary(creator.CreateDocumentObject(), dict!, "output.pdf");
+        pdfMerger.ReplacePlaceholdersWithDictonary(creator.CreateDocumentObject(), dict!);
 
         var output = _consoleOutput.ToString();
         Assert.IsTrue(output.Contains("Replacing placeholder using a dictonary"));
